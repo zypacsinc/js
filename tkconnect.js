@@ -481,7 +481,7 @@ function updateCoForm() {
 }
  
 function setCompanyData(data) { 				
-	$("#company_name").val(data.company_name);
+	$("#company_name").val(remove_al_gt2(data.company_name));
 	$("#registry_prefix").val(data.registry_prefix);
 	$("#shortname").val(data.shortname);
 	$("#authcode").val(data.authcode);
@@ -724,6 +724,8 @@ function selectedBP(val) {
 	//alert(val+"  ::  "+company_map[dataset.company_id].selected_bp.studio_name+"  "+company_map[dataset.company_id].bp_info_map[prefix]+" ::"+prefix);
 	if(!company_map[dataset.company_id].bp_info_map[prefix])// values are cached we can use
 		getBPData("bp_info",prefix, setBPInfoData);
+	else
+		buildBPtemplate();
 	//alert('******* '+company_map[dataset.company_id].selected_bp.company_bp+'    '+company_map[dataset.company_id].selected_project.projectnumber);	
 /*	if(company_map[dataset.company_id].selected_bp.company_bp == 0){// project level BP
 		if(!company_map[dataset.company_id].selected_project.projectnumber)
@@ -757,17 +759,21 @@ function setBPInfoData(prefix,data) {
 	console.log('setBPInfoData ---'+prefix+' data :'+data);
 	company_map[dataset.company_id].bp_info_map[prefix] = data;
 	//setupthe tabs
-	$('#centerdiv').html(buildTabs(2));
-	 $(function() {
-		$( "#bptabs" ).tabs();
-	  });
-	 if(!company_map[dataset.company_id].bp_info_map[prefix].bp_info.demap  ){
+	if(!company_map[dataset.company_id].bp_info_map[prefix].bp_info.demap  ){
 		var delist = company_map[dataset.company_id].bp_info_map[prefix].bp_info.de;
 		var demap ={};
 		for(var i = 0; i < delist.length; i++)
 			demap[delist[i].Name] = i;
 		company_map[dataset.company_id].bp_info_map[prefix].bp_info.demap = demap;	
-	 }
+	}
+	buildBPtemplate();
+}
+function buildBPtemplate(){
+	$('#centerdiv').html(buildTabs(2));
+	 $(function() {
+		$( "#bptabs" ).tabs();
+	  });
+	 
 	 
 	buildMetatData();
 	$('#unifierstatus').html('');
@@ -826,12 +832,21 @@ function displayBPs() {
 	str += '</table></div></div></div>';
 //	$("#rightbuttonid").html(topstr);
 	$("#centerdiv").html(str);	
+	$('#centerdiv input:radio').click(function () {
+		var val = $('input[name=bplistradio]:checked').val();
+
+		console.log('selected  clicked bp '+val);
+		selectedBP(val);
+	});
+	/*
 	$('#centerdiv input:radio').change(function () {
 		var val = $('input[name=bplistradio]:checked').val();
 		console.log('selected bp '+val);
 		selectedBP(val);
 		//alert(' v '+$('#centerdiv input:radio').val());
 	});
+	*/
+	//$('input[name=radioName]:checked', '#myForm').val()
 }
 
 //-------------
@@ -2200,8 +2215,8 @@ function setSavedServiceList(pdata){
 	}
 	str += '</table></div>';
 	str +='<div id="saveddatalistaction" style="float:left;padding-top:10px;width:99%;height:30px;z-index:100;border-top:1px solid;">';
-	str += '<a href="#" class="buttonmenu" id="selectfile"  style="margin-left:300px;" onClick="javascript:selectSavedFile()">OK</a>&nbsp;&nbsp;&nbsp;';
-	str += '<a href="#" class="buttonmenu" id="cancelbtn" onClick="javascript:f()">Cancel</a>';
+//	str += '<a href="#" class="buttonmenu" id="selectfile"  style="margin-left:300px;" onClick="javascript:selectSavedFile()">OK</a>&nbsp;&nbsp;&nbsp;';
+	str += '<a href="#" class="buttonmenu" id="cancelbtn" style="margin-left:300px;" onclick="javascript:cancelDialog1()">Close</a>';
 	str +='</div></div>';
 	//$("#rightbuttonid").html('');
 //	$("#centerdiv").html(str);	
