@@ -479,7 +479,7 @@ function setGridColumn(count, items) {
 				$('#unifierstatus').html(data.erros);
 				return;
 			}
-			proceesResponse(data,action);
+			//proceesResponse(data,action);
 
 		});
 	}

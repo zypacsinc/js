@@ -757,6 +757,10 @@ console.log('setBPInfoDataLatest ---'+prefix+' data :'+data);
 }
 function setBPInfoData(prefix,data) {
 	console.log('setBPInfoData ---'+prefix+' data :'+data);
+	if(data.error){
+		alert("Cannot find BP desgin");
+		return;
+	}
 	company_map[dataset.company_id].bp_info_map[prefix] = data;
 	//setupthe tabs
 	if(!company_map[dataset.company_id].bp_info_map[prefix].bp_info.demap  ){
@@ -2183,9 +2187,10 @@ function setSavedServiceListx(pdata){
 }	
 function listSavedFiles(){
 	var dataquery ='';
-	if(company_map[dataset.company_id].saved_files && company_map[dataset.company_id].saved_files.length > 0)
+/*	if(company_map[dataset.company_id].saved_files && company_map[dataset.company_id].saved_files.length > 0)
 		setSavedServiceList(company_map[dataset.company_id].saved_files);
 	else	
+*/
 		getData("get_saved_list", setSavedServiceList,dataquery);
 }
 function setSavedServiceList(pdata){	
