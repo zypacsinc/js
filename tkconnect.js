@@ -756,9 +756,9 @@ console.log('setBPInfoDataLatest ---'+prefix+' data :'+data);
 	setBPInfoData(prefix,data);
 }
 function setBPInfoData(prefix,data) {
-	console.log('setBPInfoData ---'+prefix+' data :'+data);
-	if(data.error){
-		alert("Cannot find BP desgin");
+	console.log('setBPInfoData ---'+prefix+' data :'+data+'  error: '+data.bp_info.error);
+	if(data.bp_info.error){
+		alert("Cannot find BP desgin for "+data.bp_name);
 		return;
 	}
 	company_map[dataset.company_id].bp_info_map[prefix] = data;
