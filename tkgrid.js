@@ -152,7 +152,7 @@ function setGridColumn(count, items) {
 			if (i == 0)
 				console.log(j + ' :' + colindex + ' ::' + gridobj.input_type);
 			if (gridobj.input_type == grid.INPUTTYPE_SELECT) {
-				console.log('select ' + items[i][s] + ' ' + gridobj.options);
+				
 				var xString = '<SELECT id="inp_' + count + '_' + i + '_' + j + '" CLASS="input" style="width:99%;">';
 				if (gridobj.options) {
 					var options = gridobj.options;
@@ -164,7 +164,8 @@ function setGridColumn(count, items) {
 					}
 				}
 				xString += '</SELECT> '; //id="C_'+count+'_'+ii+'_'+j+'"
-				$('#C_' + count + '_' + i + '_' + j).html(xString);
+				$('#cell_' + count + '_' + i + '_' + j).html(xString);
+//				console.log('select ' + items[i][s] + ' ' + xString);
 			} else{
 				if(gridobj.data_type == grid.INTEGER)
 					$('#inp_' + count + '_' + i + '_' + j).val(parseInt(items[i][s]));
@@ -309,15 +310,16 @@ function setGridColumn(count, items) {
 				if (count === 2 && bpGridMetaData[j].display_type === 'upper')
 					continue;
 				var colWidth = Number(bpGridMetaData[j].width);
-				var xString = '<td id="cell_' + row_col + '_' + count + '" style="width:' + (colWidth + 1) + 'px;" class="' + (colcount === 0 ? 'gridcol11' : 'gridcol1') + '" onKeyDown=\"if(event.keyCode ==9) return false;\" id="CCC_' + i + '_' + j + '" ';
+				var xString = '<td  style="width:' + (colWidth + 1) + 'px;" class="' + (colcount === 0 ? 'gridcol11' : 'gridcol1') + '" onKeyDown=\"if(event.keyCode ==9) return false;\" id="CCC_' + i + '_' + j + '" ';
 				xString += ' ><div class=" gridfont1" style="height:' + grid.COLUMN_HEIGHT;
 				xString += 'px;width:100%;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;" id="cell_' + count + '_' + ii + '_' + colcount + '" >';
 				if (bpGridMetaData[j].input_type == grid.INPUTTYPE_SELECT) {
 					xString += '<SELECT id="inp_' + count + '_' + ii + '_' + colcount + '" CLASS="input" style="width:99%;">';
 					if (bpGridMetaData[j].options) {
 						var options = bpGridMetaData[j].options;
-						for (var pk = 0; pk < options.length; pk++)
+						for (var pk = 0; pk < options.length; pk++){
 							xString += '<option  value="' + options[pk].value + '" >' + options[pk].name + '</option>';
+						}	
 					}
 					xString += '</SELECT> ';
 
@@ -389,7 +391,7 @@ function setGridColumn(count, items) {
 		
 		if (dataset.imported_files[prefix]) 
 			fileid = dataset.imported_files[prefix].fileid;
-		
+
 		var promise = getPostPromise(action, {
 				upper_csvdata : upperstr,
 				li_csvdata : lowerstr,
@@ -431,6 +433,9 @@ function setGridColumn(count, items) {
 					continue;
 				// its upperform
 				var text = $('#inp_' + formcount + '_' + i + '_' + colcount).val();
+				if (bpGridMetaData[j].input_type == grid.INPUTTYPE_SELECT){
+					text = $( '#inp_' + formcount + '_' + i + '_' + colcount+' option:selected' ).text();
+				}
 				if (colcount === 0) {
 					//console.log(i + '  checking for text val ' + text);
 					if (!text || typeof(text) === 'undefined' || text.trim().length == 0)
@@ -444,6 +449,7 @@ function setGridColumn(count, items) {
 			}
 			str += '\r\n';
 		}
+		console.log('grid values :'+str);
 		return str;
 	}
 	function showSaveDialog(action) {
@@ -715,6 +721,7 @@ function setGridColumn(count, items) {
 		console.log('downloadExcelData '+prefix);
 		if (dataset.imported_files[prefix]) 
 			fileid = dataset.imported_files[prefix].fileid;
+		console.log('downloadExcelData  --- aa --'+prefix);	
 		processDownload(fileid,prefix,'excel_data',"download_file",upperstr,lowerstr);
 		
 	}

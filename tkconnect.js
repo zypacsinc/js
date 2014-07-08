@@ -270,7 +270,7 @@ function displayCompanyLog() {
 	}
 	str += '</tbody></table>';
 	if(companydata.length === 0){
-		str +='<div class="font15" style="margin:30px;color:blue;"> You need to Click on <b>Create</b> to Create a new Company, this company is the company which points to your local server or QA server or production server etc, you will need the server URL the Shortname & Authocde just like you did in Ulink.<br/>You can then setup <b>Favorite Methods</b>, Click on getting <b>Project/Shells</b> &amp; <b>BP Lists</b> data.</div>'; 
+		str +='<div class="font15" style="margin:30px;color:blue;"> You need to Click on <b>Create</b> to Create a new Company, this company is the company which points to your local server or QA server or production server etc, you will need the server URL the Shortname & Authocde .<br/>You can then setup <b>Favorite Methods</b>, Click on getting <b>Project/Shells</b> &amp; <b>BP Lists</b> data.</div>'; 
 	}
 	//alert(str);
 	$("#companydiv").html(str);	
@@ -615,7 +615,7 @@ function displayProjects() {
 	}
 	str += '</table></div></div>';
 	//alert(str);
-	$("#dialog1").dialog( {height : 600, width:650,title:'Project/Shell list'} );
+	$("#dialog1").dialog( {height : 530, width:650,title:'Project/Shell list'} );
 	$("#dialog1").html( str );
 	$("#dialog1").dialog( "open" );
 	/*
@@ -653,6 +653,7 @@ function selectedProject(index,val) {
 	$("#dialog1").dialog( "close" );
 	
 }
+/*
 function getWBSCodes(projnum){
 	
 	var data_params = {projectnumber:projnum};
@@ -676,7 +677,7 @@ function displayWBSCodes(data){
 	$("#dialog1").html( str );
 	$("#dialog1").dialog( "open" );
 }
-
+*/
 function setBPList(data, display) {
 	//	alert("bp "+data)
 	if(data.errors || data.length===0)
@@ -1219,7 +1220,7 @@ function uploadZipFileClick(param){
 }
 
 function getUploadResponse(jsonstr){
-	//alert(getUploadResponse +'**** '+jsonstr);
+	console.log(getUploadResponse +'**** '+jsonstr);
 	$('#actiontype').val('dummy');
 	 $("uploadform").attr("method","get");
 	 $('#loading-indicator').hide();
@@ -1698,7 +1699,9 @@ function buildSideOptions(method){
 			opt += '</table>';
 		}
 		if(delist[k].InputType && delist[k].InputType.toLowerCase() == 'text' && delist[k].DataDefinition ){
-			var size = company_map[dataset.company_id].dddata_map[delist[k].DataDefinition].data_size;
+			var size = 0;
+			if(company_map[dataset.company_id].dddata_map[delist[k].DataDefinition])
+				size = company_map[dataset.company_id].dddata_map[delist[k].DataDefinition].data_size;
 			if(size == 0){
 				opt += delist[k].DataDefinition;
 				inputtype = delist[k].Type;
@@ -2673,11 +2676,12 @@ function processDownload(id,prefix,fileaction,actiontype,upper_csvdata,li_csvdat
 	str += '<input type="hidden" id="fileaction" name="fileaction" value="'+fileaction+'" />';
 	str += '<input type="hidden" id="actiontype" name="actiontype" value="'+actiontype+'" />';
 	// do a download post with this id;
+	console.log('processDownload '+fileaction);
 	$('#postid').html(str);
 	$("postform").attr("method","post");
 	document.postform.submit();
-	document.postform.method = "get";
-	setTimeout(resetPostForm,5000);
+	//document.postform.method = "get";
+	//setTimeout(resetPostForm,5000);
 }
 function importExcel(){
 	$('#fileactiontype').val('excel_data');
